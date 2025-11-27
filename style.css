@@ -1,0 +1,157 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Evita barras de rolagem desnecessárias no body */
+}
+
+#corkboard-container {
+    width: 100vw; /* Largura total da viewport */
+    height: 100vh; /* Altura total da viewport */
+    background-image: url('cork_texture.jpg'); /* Nome do arquivo da sua imagem de cortiça */
+    background-size: cover; /* Cobre todo o container sem distorcer a imagem */
+    background-repeat: no-repeat; /* A imagem não se repete */
+    background-position: center center; /* Centraliza a imagem */
+    
+    /* Borda marrom escura para o quadro */
+    border: 20px solid #6f4e37; 
+    box-sizing: border-box; /* Inclui o padding e a borda na largura/altura total */
+    position: relative; /* Necessário para posicionar os post-its dentro */
+    display: flex;
+    flex-direction: column;
+}
+
+#controls {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-bottom: 5px solid #6f4e37;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#controls h3 {
+    width: 100%;
+    text-align: center;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+#controls label {
+    font-weight: bold;
+    color: #555;
+}
+
+#controls input[type="color"],
+#controls textarea,
+#controls input[type="text"],
+#controls button {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+#controls input[type="color"] {
+    width: 50px;
+    height: 35px;
+    cursor: pointer;
+}
+
+#controls textarea {
+    flex-grow: 1; /* Permite que o textarea cresça */
+    min-width: 200px;
+    height: 60px;
+    resize: vertical;
+}
+
+#controls input[type="text"] {
+    min-width: 180px;
+}
+
+#controls button {
+    background-color: #6f4e37;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#controls button:hover {
+    background-color: #4a3324;
+}
+
+#postit-area {
+    flex-grow: 1; /* Ocupa o espaço restante */
+    position: relative; /* Para que os post-its possam ser posicionados absolutamente */
+}
+
+/* Estilo para cada post-it */
+.post-it {
+    position: absolute; /* Permite arrastar e soltar livremente */
+    width: 180px;
+    min-height: 100px;
+    padding: 15px;
+    background-color: #FFFF88; /* Cor padrão */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    cursor: grab; /* Indica que é arrastável */
+    transition: box-shadow 0.2s ease;
+    word-wrap: break-word; /* Quebra palavras longas */
+    overflow: hidden; /* Esconde conteúdo que exceda */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Empurra o conteúdo para as bordas se necessário */
+}
+
+.post-it:active {
+    cursor: grabbing; /* Mudar o cursor quando arrastando */
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4); /* Sombra maior ao arrastar */
+}
+
+.post-it-content {
+    margin-bottom: 5px; /* Espaço entre o conteúdo e o link/imagem */
+}
+
+.post-it img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 5px;
+    border-radius: 3px;
+}
+
+.post-it a {
+    color: #0000EE; /* Cor padrão de link */
+    text-decoration: underline;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block; /* Para que o link ocupe sua própria linha */
+}
+
+/* Botão de fechar/deletar post-it */
+.close-postit {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0; /* Esconde por padrão */
+    transition: opacity 0.2s ease;
+}
+
+.post-it:hover .close-postit {
+    opacity: 1; /* Mostra ao passar o mouse */
+}

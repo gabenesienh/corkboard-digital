@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Quadro de Cortiça Interativo</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <div id="corkboard-container">
+        <div id="controls">
+            <h3>Criar Novo Post-it</h3>
+            <div class="color-picker">
+                <label for="postit-color">Cor do Post-it:</label>
+                <input type="color" id="postit-color" value="#FFFF88"> </div>
+            
+            <textarea id="postit-text" placeholder="Digite seu texto aqui..."></textarea>
+            <input type="text" id="postit-image-url" placeholder="URL da imagem (opcional)">
+            <input type="text" id="postit-link-url" placeholder="URL do link (opcional)">
+            
+            <button id="create-postit-btn">Criar Post-it</button>
+        </div>
+
+        <div id="postit-area">
+            </div>
+
+    </div>
+
+    <script src="script.js"></script> </body>
+</html>

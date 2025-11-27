@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Quadro de Cortiça Interativo</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css"> 
+</head>
 <body>
     <div id="corkboard-container">
-        <div id="controls">
+        
+        <svg id="line-canvas"></svg>
+
+        <button id="toggle-controls-btn" title="Criar Post-it">➕</button>
+        
+        <div id="controls" class="hidden">
             <h3>Criar Novo Post-it</h3>
-            <div class="color-picker">
+            <div class="control-group">
                 <label for="postit-color">Cor do Post-it:</label>
-                <input type="color" id="postit-color" value="#FFFF88"> </div>
+                <input type="color" id="postit-color" value="#FFFF88">
+            </div>
             
-            <textarea id="postit-text" placeholder="Digite seu texto aqui..."></textarea>
+            <textarea id="postit-text" placeholder="Digite seu texto..."></textarea>
             <input type="text" id="postit-image-url" placeholder="URL da imagem (opcional)">
             <input type="text" id="postit-link-url" placeholder="URL do link (opcional)">
             
@@ -25,5 +32,6 @@
 
     </div>
 
-    <script src="script.js"></script> </body>
+    <script src="script.js"></script> 
+</body>
 </html>

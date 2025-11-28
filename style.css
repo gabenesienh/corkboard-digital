@@ -7,7 +7,7 @@ body {
 #corkboard-container {
   width: 100vw;
   height: 100vh;
-  background-image: url("cork_texture.jpg");
+  background-image: url("assets/corkboard.jpg");
   background-position: center center;
 
   /* Borda Removida: Apenas um fundo limpo */
@@ -114,7 +114,8 @@ body {
 
 .post-it {
   position: absolute;
-  width: 180px;
+  width: fit-content;
+  max-width: 300px;
   min-height: 100px;
   padding: 15px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
@@ -123,6 +124,10 @@ body {
   transition: box-shadow 0.2s;
   word-wrap: break-word;
   z-index: 10; /* Post-its ficam acima das linhas (SVG) */
+}
+
+.post-it img {
+  max-width: 100%;
 }
 
 /* Ponto de Conexão na borda do post-it */
@@ -145,10 +150,6 @@ body {
 /* Posicionamento dos handles para simplificação (top-center, bottom-center) */
 .connect-handle.top {
   top: -7px;
-  left: calc(50% - 7px);
-}
-.connect-handle.bottom {
-  bottom: -7px;
   left: calc(50% - 7px);
 }
 /* Estilo da linha SVG */

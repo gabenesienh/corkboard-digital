@@ -20,10 +20,21 @@ body {
 }
 
 .item-top {
-  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  height: 20px;
   cursor: grab;
   background-color: inherit;
   filter: brightness(90%);
+}
+
+.item-top > .alfinete {
+  aspect-ratio: 7 / 4;
+  height: 100%;
+  background-image: url("../assets/alfinete.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .post-it {
@@ -34,7 +45,7 @@ body {
   min-height: fit-content;
   max-width: fit-content;
   max-height: fit-content;
-  box-shadow: 0 0 2px black;
+  box-shadow: -6px 4px 15px -5px #111;
 }
 
 .post-it > textarea {

@@ -1,3 +1,22 @@
+function adicionarAlfinete(item) {
+  const alfinete = document.createElement("div");
+  alfinete.classList.add("alfinete");
+  item.appendChild(alfinete);
+
+  alfinete.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+  });
+
+  // Remover item ao clicar no alfinete
+  alfinete.addEventListener("click", (e) => {
+    if (e.button !== 0) return;
+
+    alfinete.parentElement.parentElement.remove();
+  })
+
+  return alfinete;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const quadro = document.getElementById("quadro")
   const painelBotoes = document.getElementsByClassName("btn-adicionar-item");
@@ -18,10 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const novoItem = document.createElement("div");
       novoItem.classList.add("item");
 
-      // Área superior do item (onde ficaria um alfinete, na vida real)
+      // Área superior do item (onde fica o alfinete)
       const novoItemTop = document.createElement("div");
       novoItemTop.classList.add("item-top");
       novoItem.appendChild(novoItemTop);
+
+      const alfinete = adicionarAlfinete(novoItemTop);
 
       switch (btn.id) {
         // Post-it para texto
@@ -62,6 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
       novoItemTop.addEventListener("mousedown", (e) => {
         if (e.button !== 0) return;
 
+        novoItem.querySelector(".alfinete").remove();
+
         novoItemTop.style.cursor = "grabbing";
 
         itemSegurado = novoItem;
@@ -91,6 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("mouseup", (e) => {
     if (e.button !== 0) return;
     if (itemSegurado === null) return;
+
+    adicionarAlfinete(itemSegurado.querySelector(".item-top"));
 
     itemSegurado.querySelector(".item-top").style.cursor = "";
 

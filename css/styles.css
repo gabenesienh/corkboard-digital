@@ -63,10 +63,10 @@ body {
 #painel-lateral {
   position: absolute;
   top: 0;
-  z-index: 1000;
+  z-index: 1001;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(0.25turn, #fff, #ddd);
+  background: linear-gradient(0.25turn, #ddd, #fff);
   min-width: 6vw;
   max-width: 6vw;
   min-height: 100vh;
@@ -85,4 +85,21 @@ body {
   position: relative;
   min-width: 100vw;
   min-height: 100vh;
+}
+
+#quadro-linhas {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+#quadro-linhas line {
+  stroke: #000;
+  stroke-width: 4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
 }

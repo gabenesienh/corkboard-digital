@@ -1,36 +1,51 @@
-function adicionarAlfinete(item) {
-  const alfinete = document.createElement("div");
-  alfinete.classList.add("alfinete");
-  item.appendChild(alfinete);
+import { AlfinetePonto } from "./alfinete-ponto.js";
 
-  alfinete.addEventListener("mousedown", (e) => {
-    e.stopPropagation();
-  });
+const quadro = document.getElementById("quadro")
+const quadroLinhas = document.getElementById("quadro-linhas");
+const painelBotoes = document.getElementsByClassName("btn-adicionar-item");
+const pontos = new WeakMap(); // Cada alfinete possui um
 
-  // Remover item ao clicar no alfinete
-  alfinete.addEventListener("click", (e) => {
-    if (e.button !== 0) return;
+// Apaga e desenha novamente as linhas do quadro
+function atualizarLinhas() {
+  quadroLinhas.textContent = "";
 
-    alfinete.parentElement.parentElement.remove();
-  })
+  for (const alfinete of document.getElementsByClassName("alfinete")) {
+    const ponto = pontos.get(alfinete);
 
-  return alfinete;
+    if (ponto.next.length > 0) {
+      const alfineteRect = alfinete.getBoundingClientRect();
+
+      for (const alfinete2 of ponto.next) {
+        const alfinete2Rect = alfinete2.getBoundingClientRect();
+
+        const linha = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+        linha.setAttribute("x1", alfineteRect.x + alfineteRect.width/2);
+        linha.setAttribute("y1", alfineteRect.y + alfineteRect.height/2);
+        linha.setAttribute("x2", alfinete2Rect.x + alfinete2Rect.width/2);
+        linha.setAttribute("y2", alfinete2Rect.y + alfinete2Rect.height/2);
+
+        quadroLinhas.appendChild(linha);
+      }
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const quadro = document.getElementById("quadro")
-  const painelBotoes = document.getElementsByClassName("btn-adicionar-item");
-
   // Usado para identificar individualmente os itens do quadro
   let novoItemId = 0;
 
   // Ao arrastar (drag & drop) um item, isso guarda uma referência do item
-  let itemSegurado = null;
+  let itemHold = null;
+
+  // Ao desenhar uma linha, isso guarda a referência da linha e do alfinete
+  let linhaHold = null;
+  let alfineteHold = null;
 
   // O quão longe o mouse deve ficar do canto superior esquerdo do item segurado
   // É definido ao clicar no item, e usado na hora de movê-lo
-  let itemSeguradoOffsetX = 0;
-  let itemSeguradoOffsetY = 0;
+  let itemHoldOffsetX = 0;
+  let itemHoldOffsetY = 0;
 
   for (const btn of painelBotoes) {
     btn.addEventListener("click", () => {
@@ -42,10 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
       novoItemTop.classList.add("item-top");
       novoItem.appendChild(novoItemTop);
 
-      const alfinete = adicionarAlfinete(novoItemTop);
+      // Criar alfinete no topo do objeto
+      const alfinete = document.createElement("div");
+      alfinete.classList.add("alfinete");
+      pontos.set(alfinete, new AlfinetePonto());
+      novoItemTop.appendChild(alfinete);
 
+      // Criar elementos do item com base no tipo dele
       switch (btn.id) {
-        // Post-it para texto
         case "btn-adicionar-post-it":
           novoItem.classList.add("post-it");
 
@@ -83,42 +102,106 @@ document.addEventListener("DOMContentLoaded", () => {
       novoItemTop.addEventListener("mousedown", (e) => {
         if (e.button !== 0) return;
 
-        novoItem.querySelector(".alfinete").remove();
+        novoItem.querySelector(".item-top > .alfinete").style.visibility = "hidden";
 
         novoItemTop.style.cursor = "grabbing";
 
-        itemSegurado = novoItem;
-        itemSeguradoOffsetX = e.clientX - parseInt(itemSegurado.style.left, 10);
-        itemSeguradoOffsetY = e.clientY - parseInt(itemSegurado.style.top, 10);
+        itemHold = novoItem;
+        itemHoldOffsetX = e.clientX - parseInt(itemHold.style.left, 10);
+        itemHoldOffsetY = e.clientY - parseInt(itemHold.style.top, 10);
         
         // Mover item para a frente do quadro (movendo os outros para trás)
         for (const item of document.getElementsByClassName("item")) {
-          if (item.style.zIndex > itemSegurado.style.zIndex) {
+          if (item.style.zIndex > itemHold.style.zIndex) {
             item.style.zIndex--;
           }
         }
 
-        itemSegurado.style.zIndex = novoItemId;
+        itemHold.style.zIndex = novoItemId;
+      })
+
+      // Começar a desenhar uma linha ao clicar no alfinete
+      alfinete.addEventListener("mousedown", (e) => {
+        e.stopPropagation();
+      
+        alfineteHold = alfinete;
+        linhaHold = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+        const alfineteRect = alfinete.getBoundingClientRect();
+
+        linhaHold.setAttribute("x1", alfineteRect.x + alfineteRect.width/2);
+        linhaHold.setAttribute("y1", alfineteRect.y + alfineteRect.height/2);
+        linhaHold.setAttribute("x2", e.clientX);
+        linhaHold.setAttribute("y2", e.clientY);
+      
+        quadroLinhas.appendChild(linhaHold);
+      });
+    
+      alfinete.addEventListener("mouseup", (e) => {
+        if (e.button !== 0) return;
+      
+        if (alfinete === alfineteHold) {
+          // Remover item ao clicar no alfinete
+          alfinete.parentElement.parentElement.remove();
+        } else {
+          const a1 = alfinete;
+          const a2 = alfineteHold;
+          const p1 = pontos.get(a1);
+          const p2 = pontos.get(a2);
+
+          // Adicionar alfinete e alfineteHold como prev e next um do outro
+          // Primeiro verificar se já não estão conectados
+          if (p1.next.indexOf(a2) === -1
+          &&  p2.next.indexOf(a1) === -1) {
+            if (p1.prev === null) {
+              // a1 é integrado na sequência de a2
+              p1.prev = a2;
+              p2.next.push(a1);
+            } else if (p2.prev === null) {
+              // a2 é integrado na sequência de a1
+              p2.prev = a1;
+              p1.next.push(a2);
+            } else if (p1.prev !== p2 && p2.prev !== p1) {
+              // Ambos possuem um ponto anterior, dar prioridade à sequência
+              // cuja linha o usuário está segurando
+              p2.next.push(a1);
+            }
+          }
+
+          atualizarLinhas();
+        }
       })
     });
   }
 
   document.body.addEventListener("mousemove", (e) => {
     if (e.button !== 0) return;
-    if (itemSegurado === null) return;
 
-    itemSegurado.style.left = `${e.clientX - itemSeguradoOffsetX}px`;
-    itemSegurado.style.top = `${e.clientY - itemSeguradoOffsetY}px`;
+    if (itemHold !== null) {
+      itemHold.style.left = `${e.clientX - itemHoldOffsetX}px`;
+      itemHold.style.top = `${e.clientY - itemHoldOffsetY}px`;
+      atualizarLinhas();
+    }
+
+    if (linhaHold !== null) {
+      linhaHold.setAttribute("x2", e.clientX);
+      linhaHold.setAttribute("y2", e.clientY);
+    }
   });
 
   document.body.addEventListener("mouseup", (e) => {
     if (e.button !== 0) return;
-    if (itemSegurado === null) return;
 
-    adicionarAlfinete(itemSegurado.querySelector(".item-top"));
+    if (itemHold !== null) {
+      itemHold.querySelector(".item-top > .alfinete").style.visibility = "";
+      itemHold.querySelector(".item-top").style.cursor = "";
+    }
 
-    itemSegurado.querySelector(".item-top").style.cursor = "";
+    if (alfineteHold !== null) {
+      atualizarLinhas();
+    }
 
-    itemSegurado = null;
+    itemHold = null;
+    alfineteHold = null;
   });
 });

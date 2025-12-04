@@ -19,6 +19,27 @@ body {
   min-width: 100%;
 }
 
+.foto {
+  background-color: #fff;
+  min-width: fit-content;
+  min-height: fit-content;
+  max-width: fit-content;
+  max-height: fit-content;
+}
+
+.item {
+  position: absolute;
+  top: 0;
+  box-shadow: -6px 4px 15px -5px #111;
+}
+
+.item > img {
+  border: 8px double black;
+  margin: 4px;
+  max-width: 500px;
+  max-height: 350px;
+}
+
 .item-top {
   display: flex;
   justify-content: center;
@@ -38,14 +59,11 @@ body {
 }
 
 .post-it {
-  position: absolute;
-  top: 0;
   background-color: #f0e17f;
   min-width: fit-content;
   min-height: fit-content;
   max-width: fit-content;
   max-height: fit-content;
-  box-shadow: -6px 4px 15px -5px #111;
 }
 
 .post-it > textarea {

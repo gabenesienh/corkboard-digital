@@ -72,6 +72,16 @@ document.addEventListener("DOMContentLoaded", () => {
           novoItem.appendChild(textarea);
 
           break;
+        case "btn-adicionar-foto":
+          const urlFoto = prompt("Insira o endereço da foto (URL):");
+
+          novoItem.classList.add("foto");
+
+          const img = document.createElement("img");
+          img.src = urlFoto;
+          novoItem.appendChild(img);
+
+          break;
       }
 
       // Mover item para a frente do quadro
@@ -102,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
       novoItemTop.addEventListener("mousedown", (e) => {
         if (e.button !== 0) return;
 
+        e.preventDefault();
+
         novoItem.querySelector(".item-top > .alfinete").style.visibility = "hidden";
 
         novoItemTop.style.cursor = "grabbing";
@@ -122,7 +134,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Começar a desenhar uma linha ao clicar no alfinete
       alfinete.addEventListener("mousedown", (e) => {
+        if (e.button !== 0) return;
         e.stopPropagation();
+        e.preventDefault();
       
         alfineteHold = alfinete;
         linhaHold = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -142,7 +156,29 @@ document.addEventListener("DOMContentLoaded", () => {
       
         if (alfinete === alfineteHold) {
           // Remover item ao clicar no alfinete
+          // Primeiro remover referências ao ponto deste alfinete
+
+          const ponto = pontos.get(alfinete);
+
+          for (const outro of document.getElementsByClassName("alfinete")) {
+            const ponto2 = pontos.get(outro);
+
+            if (ponto2.next.indexOf(alfinete) !== -1) {
+              ponto2.next.splice(ponto2.next.indexOf(alfinete), 1);
+            }
+          }
+
+          for (const next of ponto.next) {
+            const pontoNext = pontos.get(next);
+
+            if (pontoNext.prev === alfinete) {
+              pontoNext.prev = null;
+            }
+          }
+
+          // Agora, deletar alfinete
           alfinete.parentElement.parentElement.remove();
+          pontos.delete(alfinete);
         } else {
           const a1 = alfinete;
           const a2 = alfineteHold;
@@ -176,6 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.addEventListener("mousemove", (e) => {
     if (e.button !== 0) return;
+
+    e.preventDefault();
 
     if (itemHold !== null) {
       itemHold.style.left = `${e.clientX - itemHoldOffsetX}px`;

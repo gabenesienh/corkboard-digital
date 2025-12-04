@@ -11,19 +11,35 @@
 
   <div id="quadro"></div>
 
+  <button id="btn-salvar">
+    <img src="assets/icone-salvar.png" alt="Salvar como PNG">
+  </button>
+
   <div id="painel-lateral">
     <div id="pl-botoes">
       <!-- Adiciona um post-it -->
       <button class="btn-adicionar-item" id="btn-adicionar-post-it">
-        <img src="assets/icone-post-it.png">
+        <img src="assets/icone-post-it.png" alt="Adicionar post-it">
       </button>
 
       <!-- Adiciona uma foto -->
-      <button class="btn-adicionar-item" id="btn-adicionar-foto">
+      <button class="btn-adicionar-item" id="btn-adicionar-foto" alt="Adicionar foto">
         <img src="assets/icone-foto.png">
       </button>
     </div>
+    <div id="pl-opcoes">
+      <button class="btn-config" id="btn-selecionar-cores" alt="Selecionar cores">
+        <img src="assets/icone-cores.png">
+      </button>
+      <div id="cfg-cores">
+        <label for="cor-post-its">Post-its</label>
+        <input type="color" name="cor-post-its" id="cor-post-its" value="#f0e17f">
+        <label for="cor-post-its">Linhas</label>
+        <input type="color" name="cor-linhas" id="cor-linhas" value="#000000">
+      </div>
+    </div>
   </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="js/corkboard.js" type="module"></script>
 </html>

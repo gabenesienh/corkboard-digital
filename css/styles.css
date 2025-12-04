@@ -1,5 +1,4 @@
 body {
-  background-image: url("../assets/corkboard.jpg");
   margin: 0;
 }
 
@@ -17,6 +16,21 @@ body {
 .btn-adicionar-item > img {
   max-width: 100%;
   min-width: 100%;
+}
+
+.btn-config > img {
+  max-width: 100%;
+  min-width: 100%;
+}
+.btn-config {
+  height: fit-content;
+  width: 80%;
+  min-width: 80%;
+  max-width: 7vw;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .foto {
@@ -59,7 +73,6 @@ body {
 }
 
 .post-it {
-  background-color: #f0e17f;
   min-width: fit-content;
   min-height: fit-content;
   max-width: fit-content;
@@ -76,6 +89,30 @@ body {
   overflow: hidden;
   margin: 10px;
   outline: none;
+}
+
+#btn-salvar {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  max-width: 4vw;
+  max-height: 4vw;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#btn-salvar > img {
+  max-width: 100%;
+  min-width: 100%;
+}
+
+#cfg-cores {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  visibility: hidden;
 }
 
 #painel-lateral {
@@ -99,7 +136,16 @@ body {
   flex: 1;
 }
 
+#pl-opcoes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
 #quadro {
+  background-image: url("../assets/corkboard.jpg");
   position: relative;
   min-width: 100vw;
   min-height: 100vh;

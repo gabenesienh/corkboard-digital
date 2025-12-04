@@ -2,8 +2,9 @@ import { AlfinetePonto } from "./alfinete-ponto.js";
 
 const quadro = document.getElementById("quadro")
 const quadroLinhas = document.getElementById("quadro-linhas");
-const painelBotoes = document.getElementsByClassName("btn-adicionar-item");
-const pontos = new WeakMap(); // Cada alfinete possui um
+const botoesAddItem = document.getElementsByClassName("btn-adicionar-item");
+const botoesConfig = document.getElementsByClassName("btn-config");
+const pontos = new WeakMap(); // Cada alfinete possui um ponto em sua posição
 
 // Apaga e desenha novamente as linhas do quadro
 function atualizarLinhas() {
@@ -19,6 +20,8 @@ function atualizarLinhas() {
         const alfinete2Rect = alfinete2.getBoundingClientRect();
 
         const linha = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+        linha.style.stroke = document.getElementById("cor-linhas").value;
 
         linha.setAttribute("x1", alfineteRect.x + alfineteRect.width/2);
         linha.setAttribute("y1", alfineteRect.y + alfineteRect.height/2);
@@ -47,7 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let itemHoldOffsetX = 0;
   let itemHoldOffsetY = 0;
 
-  for (const btn of painelBotoes) {
+  let corLinhas = document.getElementById("cor-linhas").value;
+
+  for (const btn of botoesAddItem) {
     btn.addEventListener("click", () => {
       const novoItem = document.createElement("div");
       novoItem.classList.add("item");
@@ -67,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
       switch (btn.id) {
         case "btn-adicionar-post-it":
           novoItem.classList.add("post-it");
+          novoItem.style.backgroundColor = document.getElementById("cor-post-its").value;
 
           const textarea = document.createElement("textarea");
           novoItem.appendChild(textarea);
@@ -143,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const alfineteRect = alfinete.getBoundingClientRect();
 
+        linhaHold.style.stroke = document.getElementById("cor-linhas").value;
+
         linhaHold.setAttribute("x1", alfineteRect.x + alfineteRect.width/2);
         linhaHold.setAttribute("y1", alfineteRect.y + alfineteRect.height/2);
         linhaHold.setAttribute("x2", e.clientX);
@@ -209,6 +217,46 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     });
   }
+
+  document.getElementById("cor-linhas").addEventListener("input", () => {
+    atualizarLinhas();
+  });
+
+  // Mostrar e esconder menu de cores
+  for (const btn of botoesConfig) {
+    btn.addEventListener("click", () => {
+      switch (btn.id) {
+        case "btn-selecionar-cores":
+          const cfgCores = document.getElementById("cfg-cores");
+
+          if (cfgCores.style.visibility == "") {
+            cfgCores.style.visibility = "visible";
+          } else {
+            cfgCores.style.visibility = "";
+          }
+          break;
+      }
+    });
+  }
+
+  // Transformar o quadro em um PNG com o botão Salvar
+  document.getElementById("btn-salvar").addEventListener("click", (e) => {
+    html2canvas(
+      document.getElementById("quadro"),
+      {
+        scale: 2
+      }
+    ).then((canvas) => {
+        let a = document.createElement('a');
+
+        a.href = canvas.toDataURL("image/png");
+        a.download = "corkboard.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    );
+  });
 
   document.body.addEventListener("mousemove", (e) => {
     if (e.button !== 0) return;
